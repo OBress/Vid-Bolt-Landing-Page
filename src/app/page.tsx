@@ -5,7 +5,21 @@ import { useScrollReveal } from "./hooks";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 
-const AgentNetwork = dynamic(() => import("@/components/AgentNetwork"), { ssr: false });
+const AgentNetwork = dynamic(() => import("@/components/AgentNetwork"), {
+  ssr: false,
+  loading: () => (
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        background: "radial-gradient(ellipse at center, rgba(249,115,22,0.04) 0%, transparent 70%)",
+        overflow: "hidden",
+      }}
+    >
+      <div className="skeleton-shimmer" />
+    </div>
+  ),
+});
 import {
   Zap,
   ArrowRight,
@@ -17,8 +31,6 @@ import {
   Film,
   Download,
   ChevronRight,
-  Menu,
-  X,
   DollarSign,
 } from "lucide-react";
 
@@ -28,7 +40,6 @@ import {
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 50);
@@ -74,33 +85,31 @@ function Navbar() {
           ))}
         </div>
 
-        {/* CTA + hamburger */}
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        {/* CTA buttons — always visible */}
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <a
             href="https://discord.gg/FJGkxFPkKJ"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:inline-flex"
             style={{
-              alignItems: "center", gap: "6px", padding: "10px 22px",
+              display: "inline-flex", alignItems: "center", gap: "6px", padding: "clamp(6px, 1.2vw, 10px) clamp(12px, 2.5vw, 22px)",
               background: "transparent",
-              color: "#e5e5e5", fontWeight: 700, fontSize: "13px", borderRadius: "9999px", textDecoration: "none",
+              color: "#e5e5e5", fontWeight: 700, fontSize: "clamp(11px, 1.5vw, 13px)", borderRadius: "9999px", textDecoration: "none",
               border: "1px solid rgba(255,255,255,0.12)",
               transition: "all 0.3s cubic-bezier(0.22,1,0.36,1)",
             }}
             onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.borderColor = "#5865F2"; e.currentTarget.style.color = "#5865F2"; e.currentTarget.style.background = "rgba(88,101,242,0.06)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)"; e.currentTarget.style.color = "#e5e5e5"; e.currentTarget.style.background = "transparent"; }}
           >
-            <svg width="16" height="12" viewBox="0 0 71 55" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M60.1 4.9A58.5 58.5 0 0045.4.2a.2.2 0 00-.2.1 40.8 40.8 0 00-1.8 3.7 54 54 0 00-16.2 0A37.4 37.4 0 0025.4.3a.2.2 0 00-.2-.1A58.4 58.4 0 0010.5 4.9a.2.2 0 00-.1.1C1.5 18.7-.9 32.2.3 45.5v.2a58.9 58.9 0 0017.7 9a.2.2 0 00.3-.1 42.1 42.1 0 003.6-5.9.2.2 0 00-.1-.3 38.8 38.8 0 01-5.5-2.7.2.2 0 010-.4l1.1-.9a.2.2 0 01.2 0 42 42 0 0035.6 0 .2.2 0 01.2 0l1.1.9a.2.2 0 010 .4 36.4 36.4 0 01-5.5 2.7.2.2 0 00-.1.3 47.3 47.3 0 003.6 5.9.2.2 0 00.3.1A58.7 58.7 0 0070.5 45.7v-.2c1.4-15-2.3-28.4-9.8-40.1a.2.2 0 00-.1-.1h-.5zM23.7 37.3c-3.5 0-6.3-3.2-6.3-7.1s2.8-7.1 6.3-7.1 6.4 3.2 6.3 7.1c0 3.9-2.8 7.1-6.3 7.1zm23.3 0c-3.5 0-6.3-3.2-6.3-7.1s2.8-7.1 6.3-7.1 6.4 3.2 6.3 7.1c0 3.9-2.8 7.1-6.3 7.1z"/></svg>
+            <svg className="hidden sm:block" width="16" height="12" viewBox="0 0 71 55" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M60.1 4.9A58.5 58.5 0 0045.4.2a.2.2 0 00-.2.1 40.8 40.8 0 00-1.8 3.7 54 54 0 00-16.2 0A37.4 37.4 0 0025.4.3a.2.2 0 00-.2-.1A58.4 58.4 0 0010.5 4.9a.2.2 0 00-.1.1C1.5 18.7-.9 32.2.3 45.5v.2a58.9 58.9 0 0017.7 9a.2.2 0 00.3-.1 42.1 42.1 0 003.6-5.9.2.2 0 00-.1-.3 38.8 38.8 0 01-5.5-2.7.2.2 0 010-.4l1.1-.9a.2.2 0 01.2 0 42 42 0 0035.6 0 .2.2 0 01.2 0l1.1.9a.2.2 0 010 .4 36.4 36.4 0 01-5.5 2.7.2.2 0 00-.1.3 47.3 47.3 0 003.6 5.9.2.2 0 00.3.1A58.7 58.7 0 0070.5 45.7v-.2c1.4-15-2.3-28.4-9.8-40.1a.2.2 0 00-.1-.1h-.5zM23.7 37.3c-3.5 0-6.3-3.2-6.3-7.1s2.8-7.1 6.3-7.1 6.4 3.2 6.3 7.1c0 3.9-2.8 7.1-6.3 7.1zm23.3 0c-3.5 0-6.3-3.2-6.3-7.1s2.8-7.1 6.3-7.1 6.4 3.2 6.3 7.1c0 3.9-2.8 7.1-6.3 7.1z"/></svg>
             Apply to Join
           </a>
           <a
             href="https://studio.vidbolt.app"
-            className="hidden sm:inline-flex"
             style={{
-              alignItems: "center", gap: "6px", padding: "10px 22px",
+              display: "inline-flex", alignItems: "center", gap: "6px", padding: "clamp(6px, 1.2vw, 10px) clamp(12px, 2.5vw, 22px)",
               background: "linear-gradient(135deg, #f97316, #ea580c)",
-              color: "#fff", fontWeight: 700, fontSize: "13px", borderRadius: "9999px", textDecoration: "none",
+              color: "#fff", fontWeight: 700, fontSize: "clamp(11px, 1.5vw, 13px)", borderRadius: "9999px", textDecoration: "none",
               boxShadow: "0 4px 15px rgba(249,115,22,0.25)",
               transition: "all 0.3s cubic-bezier(0.22,1,0.36,1)",
             }}
@@ -109,31 +118,8 @@ function Navbar() {
           >
             Dashboard <ArrowRight size={14} />
           </a>
-          <button
-            className="md:hidden"
-            onClick={() => setOpen(!open)}
-            style={{ background: "none", border: "none", color: "#a3a3a3", cursor: "pointer", padding: "8px" }}
-            aria-label="Toggle menu"
-          >
-            {open ? <X size={22} /> : <Menu size={22} />}
-          </button>
         </div>
       </nav>
-
-      {/* Mobile menu */}
-      {open && (
-        <div className="md:hidden" style={{ borderTop: "1px solid rgba(255,255,255,0.06)", background: "rgba(0,0,0,0.95)", backdropFilter: "blur(20px)", padding: "16px 24px" }}>
-          {[
-            { href: "#features", label: "Features" },
-            { href: "#how-it-works", label: "How It Works" },
-            { href: "#technology", label: "Technology" },
-          ].map((l) => (
-            <a key={l.href} href={l.href} onClick={() => setOpen(false)} style={{ display: "block", padding: "12px 0", fontSize: "14px", color: "#d4d4d4", textDecoration: "none" }}>
-              {l.label}
-            </a>
-          ))}
-        </div>
-      )}
     </header>
   );
 }
@@ -149,19 +135,20 @@ function Hero() {
       <AgentNetwork fullPage />
 
       {/* Gradient orbs */}
-      <div style={{ position: "absolute", width: "700px", height: "700px", top: "-200px", right: "-150px", borderRadius: "50%", background: "radial-gradient(circle, rgba(249,115,22,0.12), transparent 70%)", filter: "blur(60px)", animation: "orb-drift-1 25s ease-in-out infinite", pointerEvents: "none", zIndex: 1 }} />
-      <div style={{ position: "absolute", width: "500px", height: "500px", bottom: "-100px", left: "-100px", borderRadius: "50%", background: "radial-gradient(circle, rgba(59,130,246,0.06), transparent 70%)", filter: "blur(60px)", animation: "orb-drift-2 30s ease-in-out infinite", pointerEvents: "none", zIndex: 1 }} />
+      <div style={{ position: "absolute", width: "clamp(300px, 60vw, 700px)", height: "clamp(300px, 60vw, 700px)", top: "-200px", right: "-150px", borderRadius: "50%", background: "radial-gradient(circle, rgba(249,115,22,0.12), transparent 70%)", filter: "blur(60px)", animation: "orb-drift-1 25s ease-in-out infinite", pointerEvents: "none", zIndex: 1 }} />
+      <div style={{ position: "absolute", width: "clamp(250px, 45vw, 500px)", height: "clamp(250px, 45vw, 500px)", bottom: "-100px", left: "-100px", borderRadius: "50%", background: "radial-gradient(circle, rgba(59,130,246,0.06), transparent 70%)", filter: "blur(60px)", animation: "orb-drift-2 30s ease-in-out infinite", pointerEvents: "none", zIndex: 1 }} />
 
       {/* Headline — no glass card, directly over the network */}
         <h1
           style={{
             position: "relative",
             zIndex: 2,
-            fontSize: "clamp(32px, 5.5vw, 64px)",
+            fontSize: "clamp(36px, 5.5vw, 64px)",
             fontWeight: 900,
             lineHeight: 1.1,
             letterSpacing: "-0.03em",
             textAlign: "center",
+            padding: "0 20px",
             textShadow: "0 2px 30px rgba(0,0,0,0.6), 0 0 60px rgba(0,0,0,0.4)",
             animation: "hero-fade-in 1s cubic-bezier(0.22,1,0.36,1) 0.4s both",
           }}
@@ -170,7 +157,7 @@ function Hero() {
           <span style={{ background: "linear-gradient(135deg, #fb923c, #f97316, #ea580c)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", textShadow: "none", filter: "drop-shadow(0 0 20px rgba(249,115,22,0.4))" }}>
             Fully-Agentic
           </span><br />
-          Production Platform.
+          Production<span className="mobile-break" />{" "}Platform.
         </h1>
     </section>
   );
@@ -225,13 +212,13 @@ function FeatureShowcase() {
           return (
             <div key={f.badge} style={{ display: "grid", gridTemplateColumns: "1fr", gap: "clamp(32px, 6vw, 80px)", alignItems: "center", marginBottom: i < FEATURES.length - 1 ? "clamp(80px, 12vw, 140px)" : "0" }} className="lg:!grid-cols-2">
               {/* Text */}
-              <div style={{ order: reversed ? 2 : 1 }} className={reversed ? "reveal-right" : "reveal-left"}>
+              <div style={{ order: reversed ? 2 : 1 }} className={`${reversed ? "reveal-right" : "reveal-left"} mobile-text-first`}>
                 <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "5px 12px", borderRadius: "9999px", border: "1px solid rgba(249,115,22,0.2)", background: "rgba(249,115,22,0.06)", marginBottom: "20px" }}>
                   <Cpu size={13} color="#f97316" />
                   <span style={{ fontSize: "10px", fontWeight: 700, color: "#fb923c", letterSpacing: "0.12em", textTransform: "uppercase", fontFamily: "var(--font-geist-mono), monospace" }}>{f.badge}</span>
                 </div>
-                <h3 style={{ fontSize: "clamp(24px, 3.5vw, 42px)", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1.1, marginBottom: "16px" }}>{f.title}</h3>
-                <p style={{ fontSize: "16px", color: "#737373", lineHeight: 1.7, maxWidth: "460px", marginBottom: "24px" }}>{f.desc}</p>
+                <h3 style={{ fontSize: "clamp(22px, 3.5vw, 42px)", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1.1, marginBottom: "16px" }}>{f.title}</h3>
+                <p style={{ fontSize: "clamp(14px, 2.5vw, 16px)", color: "#737373", lineHeight: 1.7, maxWidth: "460px", marginBottom: "24px" }}>{f.desc}</p>
                 <ul style={{ listStyle: "none", padding: 0 }}>
                   {f.bullets.map((b) => (
                     <li key={b} style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px", fontSize: "14px", color: "#d4d4d4" }}>
@@ -245,12 +232,13 @@ function FeatureShowcase() {
               </div>
 
               {/* Laptop mockup */}
-              <div style={{ order: reversed ? 1 : 2 }} className="reveal-scale">
+              <div style={{ order: reversed ? 1 : 2 }} className="reveal-scale mobile-image-second">
                 <Image
                   src={f.image}
                   alt={f.alt}
                   width={1024}
                   height={1024}
+                  {...(i === 0 ? { priority: true } : { loading: "lazy" })}
                   style={{
                     width: "100%",
                     height: "auto",
@@ -294,11 +282,12 @@ function HowItWorks() {
           </h2>
         </div>
 
-        <div className="stagger-children" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px" }}>
+        <div className="stagger-children" style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "16px" }}>
           {STEPS.map((step, i) => {
             const Icon = step.icon;
             return (
               <div key={step.title} style={{
+                flex: "1 1 200px", maxWidth: "320px",
                 background: "rgba(23,23,23,0.5)", backdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "16px", padding: "28px 24px",
                 transition: "all 0.4s cubic-bezier(0.22,1,0.36,1)", cursor: "default", position: "relative", overflow: "hidden",
               }}
@@ -349,11 +338,11 @@ function TrustSection() {
         <div className="reveal-up" style={{ textAlign: "center", marginBottom: "60px" }}>
           <p style={{ fontSize: "13px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.2em", color: "#f97316", marginBottom: "14px", fontFamily: "var(--font-geist-mono), monospace" }}>Built Different</p>
           <h2 style={{ fontSize: "clamp(28px, 4vw, 52px)", fontWeight: 900, letterSpacing: "-0.03em" }}>
-            Enterprise-grade. <span style={{ color: "#525252" }}>Creator-friendly.</span>
+            Enterprise-grade.<span className="mobile-break" />{" "}<span style={{ color: "#525252" }}>Creator-friendly.</span>
           </h2>
         </div>
 
-        <div className="stagger-children" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "16px" }}>
+        <div className="stagger-children" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(220px, 100%), 1fr))", gap: "16px" }}>
           {TRUST.map((t) => {
             const Icon = t.icon;
             return (
@@ -396,12 +385,12 @@ function CTA() {
           Vid Bolt is invite-only. We partner with experienced creators and established channels
           who are ready to scale production through AI. Apply to see if you qualify.
         </p>
-        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "14px" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "14px", padding: "0 16px" }}>
           <a
             href="https://discord.gg/FJGkxFPkKJ"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "16px 36px", background: "transparent", color: "#e5e5e5", fontWeight: 700, fontSize: "16px", borderRadius: "9999px", textDecoration: "none", border: "1px solid rgba(255,255,255,0.12)", transition: "all 0.3s" }}
+            style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "clamp(12px, 2vw, 16px) clamp(24px, 4vw, 36px)", background: "transparent", color: "#e5e5e5", fontWeight: 700, fontSize: "clamp(14px, 2vw, 16px)", borderRadius: "9999px", textDecoration: "none", border: "1px solid rgba(255,255,255,0.12)", transition: "all 0.3s" }}
             onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#5865F2"; e.currentTarget.style.color = "#5865F2"; e.currentTarget.style.background = "rgba(88,101,242,0.06)"; e.currentTarget.style.transform = "translateY(-3px)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)"; e.currentTarget.style.color = "#e5e5e5"; e.currentTarget.style.background = "transparent"; e.currentTarget.style.transform = "translateY(0)"; }}
           >
@@ -410,7 +399,7 @@ function CTA() {
           </a>
           <a
             href="https://studio.vidbolt.app"
-            style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "16px 36px", background: "linear-gradient(135deg, #f97316, #ea580c)", color: "#fff", fontWeight: 700, fontSize: "16px", borderRadius: "9999px", textDecoration: "none", boxShadow: "0 8px 30px rgba(249,115,22,0.3)", transition: "all 0.3s" }}
+            style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "clamp(12px, 2vw, 16px) clamp(24px, 4vw, 36px)", background: "linear-gradient(135deg, #f97316, #ea580c)", color: "#fff", fontWeight: 700, fontSize: "clamp(14px, 2vw, 16px)", borderRadius: "9999px", textDecoration: "none", boxShadow: "0 8px 30px rgba(249,115,22,0.3)", transition: "all 0.3s" }}
             onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(249,115,22,0.4)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(249,115,22,0.3)"; }}
           >
@@ -459,6 +448,15 @@ export default function Home() {
         <CTA />
       </main>
       <Footer />
+      <noscript>
+        <style>{`
+          .reveal-up, .reveal-scale, .reveal-left, .reveal-right,
+          .stagger-children > * {
+            opacity: 1 !important;
+            transform: none !important;
+          }
+        `}</style>
+      </noscript>
     </>
   );
 }

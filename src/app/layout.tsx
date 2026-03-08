@@ -39,12 +39,21 @@ export const metadata: Metadata = {
     siteName: "Vid Bolt",
     type: "website",
     locale: "en_US",
+    images: [
+      {
+        url: "https://vidbolt.app/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Vid Bolt — AI-Powered Video Production Platform",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Vid Bolt — AI-Powered Video Production",
     description:
       "Create professional videos with AI in minutes. Research, script, produce, edit, export.",
+    images: ["https://vidbolt.app/og-image.png"],
   },
   robots: {
     index: true,
@@ -70,6 +79,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
+        <meta name="theme-color" content="#000000" />
+        <link rel="preconnect" href="https://studio.vidbolt.app" />
+        <link rel="dns-prefetch" href="https://discord.gg" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

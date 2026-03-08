@@ -170,6 +170,7 @@ function StatusPill({ text, color, style }: { text: string; color: string; style
 export default function AgentNetwork({ fullPage = false }: { fullPage?: boolean }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [dims, setDims] = useState({ w: 800, h: 500 });
+  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   // Each slot cycles independently with its own timer
   const [slot0, setSlot0] = useState(0);
   const [slot1, setSlot1] = useState(Math.floor(STATUS_MESSAGES.length / 3));
@@ -214,7 +215,10 @@ export default function AgentNetwork({ fullPage = false }: { fullPage?: boolean 
 
   const visibleStatuses = [slot0, slot1, slot2];
 
-  const pad = fullPage ? { x: 60, y: 60 } : { x: 40, y: 30 };
+  const isNarrow = dims.w < 500;
+  const pad = fullPage
+    ? { x: isNarrow ? 10 : 60, y: isNarrow ? 20 : 60 }
+    : { x: isNarrow ? 12 : 40, y: isNarrow ? 16 : 30 };
   const getPos = (a: typeof AGENTS[0]) => ({
     x: pad.x + a.x * (dims.w - pad.x * 2),
     y: pad.y + a.y * (dims.h - pad.y * 2),
@@ -266,16 +270,39 @@ export default function AgentNetwork({ fullPage = false }: { fullPage?: boolean 
           {/* Agent nodes */}
           {AGENTS.map((agent) => {
             const pos = getPos(agent);
-            const r = agent.isCenter ? 24 : 18;
+            const r = isNarrow ? (agent.isCenter ? 18 : 14) : (agent.isCenter ? 24 : 18);
+            const isHovered = hoveredNode === agent.id;
             return (
-              <g key={agent.id}>
+              <g
+                key={agent.id}
+                style={{
+                  transform: `translate(${pos.x}px, ${pos.y}px) scale(${isHovered ? 1.25 : 1})`,
+                  transformOrigin: '0 0',
+                  transition: 'transform 0.25s cubic-bezier(0.22,1,0.36,1)',
+                  cursor: 'pointer',
+                  pointerEvents: 'auto',
+                }}
+                onMouseEnter={() => setHoveredNode(agent.id)}
+                onMouseLeave={() => setHoveredNode(null)}
+              >
+                {/* Highlight glow on hover */}
+                {isHovered && (
+                  <circle
+                    cx={0} cy={0} r={r + 18}
+                    fill={`${agent.color}12`}
+                    stroke={agent.color}
+                    strokeWidth="1.5"
+                    opacity="0.5"
+                  />
+                )}
+
                 {/* Outer glow */}
                 <circle
-                  cx={pos.x} cy={pos.y} r={r + 8}
+                  cx={0} cy={0} r={r + 8}
                   fill="none"
                   stroke={agent.color}
                   strokeWidth="1"
-                  opacity="0.2"
+                  opacity={isHovered ? 0.45 : 0.2}
                 >
                   <animate
                     attributeName="r"
@@ -285,7 +312,7 @@ export default function AgentNetwork({ fullPage = false }: { fullPage?: boolean 
                   />
                   <animate
                     attributeName="opacity"
-                    values="0.2;0.08;0.2"
+                    values={isHovered ? "0.45;0.25;0.45" : "0.2;0.08;0.2"}
                     dur="3s"
                     repeatCount="indefinite"
                   />
@@ -293,22 +320,22 @@ export default function AgentNetwork({ fullPage = false }: { fullPage?: boolean 
 
                 {/* Bg circle */}
                 <circle
-                  cx={pos.x} cy={pos.y} r={r}
-                  fill={`${agent.color}10`}
+                  cx={0} cy={0} r={r}
+                  fill={isHovered ? `${agent.color}30` : `${agent.color}10`}
                   stroke={agent.color}
-                  strokeWidth={agent.isCenter ? 2 : 1.5}
-                  opacity="0.9"
+                  strokeWidth={isHovered ? 2.5 : (agent.isCenter ? 2 : 1.5)}
+                  opacity={isHovered ? 1 : 0.9}
                 />
 
                 {/* Inner icon circle */}
                 <circle
-                  cx={pos.x} cy={pos.y} r={r * 0.55}
-                  fill={`${agent.color}25`}
+                  cx={0} cy={0} r={r * 0.55}
+                  fill={isHovered ? `${agent.color}45` : `${agent.color}25`}
                 />
 
                 {/* Bot icon */}
                 <text
-                  x={pos.x} y={pos.y + 1}
+                  x={0} y={1}
                   textAnchor="middle"
                   dominantBaseline="central"
                   fontSize={agent.isCenter ? 14 : 11}
@@ -320,18 +347,18 @@ export default function AgentNetwork({ fullPage = false }: { fullPage?: boolean 
                 </text>
 
                 {/* Status dot */}
-                <circle cx={pos.x + r * 0.7} cy={pos.y - r * 0.7} r="3" fill="#22c55e">
+                <circle cx={r * 0.7} cy={-r * 0.7} r="3" fill="#22c55e">
                   <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite" />
                 </circle>
 
                 {/* Label */}
                 <text
-                  x={pos.x}
-                  y={pos.y + r + 14}
+                  x={0}
+                  y={r + 14}
                   textAnchor="middle"
                   fontSize="9"
                   fontWeight="600"
-                  fill="#737373"
+                  fill={isHovered ? '#e5e5e5' : '#737373'}
                   fontFamily="var(--font-geist-mono), monospace"
                   letterSpacing="0.02em"
                 >
@@ -342,8 +369,8 @@ export default function AgentNetwork({ fullPage = false }: { fullPage?: boolean 
           })}
         </svg>
 
-        {/* Status pills */}
-        {visibleStatuses.map((idx, i) => {
+        {/* Status pills — hidden on very narrow screens to prevent clipping */}
+        {!isNarrow && visibleStatuses.map((idx, i) => {
           const msg = STATUS_MESSAGES[idx];
           const agent = agentMap[msg.agentId];
           if (!agent) return null;
@@ -525,15 +552,15 @@ export default function AgentNetwork({ fullPage = false }: { fullPage?: boolean 
               </circle>
 
               {/* Label */}
-              <text
-                x={pos.x}
-                y={pos.y + r + 16}
-                textAnchor="middle"
-                fontSize="11"
-                fontWeight="600"
-                fill="#a3a3a3"
-                fontFamily="var(--font-geist-mono), monospace"
-                letterSpacing="0.02em"
+                <text
+                  x={pos.x}
+                  y={pos.y + r + (isNarrow ? 10 : 14)}
+                  textAnchor="middle"
+                  fontSize={isNarrow ? "9" : "9"}
+                  fontWeight="600"
+                  fill="#737373"
+                  fontFamily="var(--font-geist-mono), monospace"
+                  letterSpacing="0.02em"
               >
                 {agent.label}
               </text>

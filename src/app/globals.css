@@ -154,6 +154,72 @@ body {
 }
 
 /* ============================================================================
+   MOBILE RESPONSIVE
+   ============================================================================ */
+
+.mobile-break { display: none; }
+
+/* Feature rows: always text-first, image-second on mobile */
+@media (max-width: 768px) {
+  .mobile-text-first  { order: 1 !important; }
+  .mobile-image-second { order: 2 !important; }
+
+  /* Break "Production Platform." onto two lines on mobile */
+  .mobile-break {
+    display: block;
+  }
+}
+
+/* Smaller float animation on mobile */
+@media (max-width: 480px) {
+  .float-slow-mobile {
+    animation-name: float-slow-sm !important;
+  }
+}
+
+@keyframes float-slow-sm {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+/* ============================================================================
+   SKELETON SHIMMER (AgentNetwork loading placeholder)
+   ============================================================================ */
+
+.skeleton-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(249, 115, 22, 0.03) 40%,
+    rgba(249, 115, 22, 0.06) 50%,
+    rgba(249, 115, 22, 0.03) 60%,
+    transparent 100%
+  );
+  animation: shimmer 2.5s ease-in-out infinite;
+}
+
+/* ============================================================================
+   ACCESSIBILITY — reduced motion
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up, .reveal-scale, .reveal-left, .reveal-right,
+  .stagger-children > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================================
    SCROLLBAR
    ============================================================================ */
 
