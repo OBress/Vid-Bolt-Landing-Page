@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 // ─────────────────────────────────────────────────────────────────────────────
 export function useScrollReveal() {
   useEffect(() => {
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -15,7 +16,10 @@ export function useScrollReveal() {
           }
         });
       },
-      { threshold: 0.08, rootMargin: "0px 0px -40px 0px" }
+      {
+        threshold: isMobile ? 0.15 : 0.08,
+        rootMargin: isMobile ? "0px" : "0px 0px -40px 0px",
+      }
     );
 
     const targets = document.querySelectorAll(
