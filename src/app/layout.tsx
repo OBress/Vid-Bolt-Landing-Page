@@ -82,6 +82,12 @@ export default function RootLayout({
         <meta name="theme-color" content="#000000" />
         <link rel="preconnect" href="https://studio.vidbolt.app" />
         <link rel="dns-prefetch" href="https://discord.gg" />
+        <link
+          rel="preload"
+          href="/devices/feature-command-center.webp"
+          as="image"
+          type="image/webp"
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

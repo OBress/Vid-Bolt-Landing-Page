@@ -324,7 +324,7 @@ const FEATURES = [
       "Real-time agent network monitoring",
       "Automated activity logging",
     ],
-    image: "/devices/feature-command-center.png",
+    image: "/devices/feature-command-center.webp",
     alt: "Vid Bolt Command Center — project dashboard with agent network and GPU monitoring",
   },
   {
@@ -336,7 +336,7 @@ const FEATURES = [
       "Brand-matched visual themes",
       "Granular export & quality controls",
     ],
-    image: "/devices/feature-settings.png",
+    image: "/devices/feature-settings.webp",
     alt: "Vid Bolt Settings — fully customizable AI and export preferences",
   },
   {
@@ -348,7 +348,7 @@ const FEATURES = [
       "AI-powered research & scripting",
       "Automated media sourcing & assembly",
     ],
-    image: "/devices/feature-creation.png",
+    image: "/devices/feature-creation.webp",
     alt: "Vid Bolt Video Creation — AI-driven topic-to-video pipeline wizard",
   },
   {
@@ -360,7 +360,7 @@ const FEATURES = [
       "AI-assisted clip arrangement",
       "One-click 1080p+ export",
     ],
-    image: "/devices/feature-editor.png",
+    image: "/devices/feature-editor.webp",
     alt: "Vid Bolt Video Editor — multi-track timeline with AI-assisted editing tools",
   },
 ];
